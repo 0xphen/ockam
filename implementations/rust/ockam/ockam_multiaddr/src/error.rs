@@ -94,8 +94,9 @@ impl From<fmt::Error> for Error {
     }
 }
 
-impl From<Error> for ockam_core::Error {
-    fn from(e: Error) -> Self {
-        ockam_core::Error::new(Origin::Unknown, Kind::Invalid, e)
-    }
+impl Into<ockam_core::Error> for Error {
+  #[track_caller]
+  fn into(self) -> ockam_core::Error {
+    ockam_core::Error::new(Origin::Unknown, Kind::Invalid, self)
+  }
 }

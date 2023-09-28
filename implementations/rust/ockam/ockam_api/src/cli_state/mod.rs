@@ -86,17 +86,18 @@ impl From<&str> for CliStateError {
     }
 }
 
-impl From<CliStateError> for ockam_core::Error {
-    fn from(e: CliStateError) -> Self {
-        match e {
-            CliStateError::Ockam(e) => e,
-            _ => ockam_core::Error::new(
-                ockam_core::errcode::Origin::Application,
-                ockam_core::errcode::Kind::Internal,
-                e,
-            ),
-        }
-    }
+impl Into<ockam_core::Error> for CliStateError {
+  #[track_caller]
+  fn into(self) -> ockam_core::Error {
+      match self {
+          CliStateError::Ockam(e) => e,
+          _ => ockam_core::Error::new(
+              ockam_core::errcode::Origin::Application,
+              ockam_core::errcode::Kind::Internal,
+              self,
+          ),
+      }
+  }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
